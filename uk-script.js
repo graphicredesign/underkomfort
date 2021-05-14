@@ -1,5 +1,50 @@
 // JavaScript Document
 
+var video = document.querySelector("#v0");;
+
+/*
+function detectMob() {
+ return ( ( window.innerWidth <= 800 ) && ( window.innerHeight <= 600 ) );
+}
+  
+window.onresize = function() {
+	
+	console.log(detectMob())
+	
+	if(detectMob() == true){
+
+		console.log("mobile detected");
+		console.log("hide video");
+		//document.querySelector(video).style.display = "block"; //make video visible
+
+	}else{
+
+		console.log("desktop detected");
+		console.log("show video");
+		//document.querySelector(video).style.display = "none"; //make video visible
+
+	}
+	
+}
+*/
+
+var detector = new MobileDetect(window.navigator.userAgent)
+console.log( "Mobile: " + detector.mobile());
+console.log( "Phone: " + detector.phone());
+console.log( "Tablet: " + detector.tablet());
+console.log( "OS: " + detector.os());
+console.log( "userAgent: " + detector.userAgent());
+
+
+/*if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+ 	console.log("mobile");
+	document.querySelector(".body-id").style.background = "red";
+}else{
+	console.log("desktop");
+	document.querySelector(".body-id").style.background = "red";
+}*/
+
+
 /*function detectMob() {
     return ( ( window.innerWidth <= 800 ) && ( window.innerHeight <= 600 ) );
 }
