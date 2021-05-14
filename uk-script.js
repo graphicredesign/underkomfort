@@ -1,6 +1,6 @@
 // JavaScript Document
 
-var video = document.querySelector("#v0");;
+var video = document.querySelector("#v0");
 
 /*
 function detectMob() {
@@ -29,11 +29,28 @@ window.onresize = function() {
 */
 
 var detector = new MobileDetect(window.navigator.userAgent)
-console.log( "Mobile: " + detector.mobile());
-console.log( "Phone: " + detector.phone());
-console.log( "Tablet: " + detector.tablet());
-console.log( "OS: " + detector.os());
-console.log( "userAgent: " + detector.userAgent());
+
+if(detector.mobile() == null ){
+	
+	document.querySelector('.section.main-section').style.height = 10000 + "px";
+	video.play();
+	TweenMax.delayedCall(3.5, video.pause, null, video);
+	
+	console.group(`DESKTOP`);
+	console.log(`Is video present? ${video}`);
+	console.groupEnd();
+   
+}else{
+	
+	document.querySelector('.section.main-section').style.height = "auto"; //set 
+	video.stop(); //stop video in case it plays in non-IOS Safari browsers/devices
+	video.style.display = "none"; //remove video
+	
+	console.group(`MOBILE`);
+	console.log(`Is video present? ${video}`);
+	console.groupEnd();
+	
+}
 
 
 /*if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
