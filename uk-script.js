@@ -15,6 +15,8 @@ var pagetl = gsap.timeline({paused:true});
      display: "none"
  });
 
+console.log("YEEEES")
+
 var scrollArrowTl = gsap.timeline({paused:true});
 scrollArrowTl.from(".scroll-arrow-cont", 1, {
     y: "50"
@@ -24,6 +26,8 @@ scrollArrowTl.to(".scroll-arrow-cont", 1, {
 });
 
 var video = document.querySelector("#v0");
+var initialFrame = 3000;
+var first = true;
 
 /** Detect Mobile **/
 var detector = new MobileDetect(window.navigator.userAgent);
@@ -33,25 +37,54 @@ if(detector.mobile() == null ){
 	document.querySelector('.section.main-section').style.height = 10000 + "px";
 	video.play();
 	TweenMax.delayedCall(3.5, video.pause, null, video);
-	//TweenMax.delayedCall(3.6, startScrollBasedAnimation);
+	
 	video.onpause = function() {
     	startScrollBasedAnimation();
-		console.log('paused video')
+		//initialFrame = video.currentTime;
+		console.group("Paused Video Info");
+		console.log('paused video');
+		console.log(`Current time is ${video.currentTime} on pause`); //3.361449, 3.418976, 3.045391, 3.422562
+		console.log(`Current Y offset ${window.pageYOffset}`)
+		console.groupEnd();
 	};
 	
 	//** Setup scroll for video **//
 	const intro = document.querySelector("#main-section");
-    var frameNumber = 0,
+    var frameNumber = initialFrame,
         playbackConst = 1000,
-        vid = document.getElementById('v0');    
+        vid = document.getElementById('v0');
+	
+	var tl = gsap.timeline();
+    tl.to(window, {
+        duration: 5,
+        scrollTo: 3500,
+        ease: Power1.easeOut
+    });
+	
+	//window.cancelAnimationFrame(requestId);
+	
+	//window.addEventListener("scroll", startScrollBasedAnimation);
 	
 	function startScrollBasedAnimation(){
+		
+		scrollPlay();
 	
 		function scrollPlay() {
+						
+			/*console.log(`Current time is ${initialFrame} after pause`);
 
 			//detect if first page load
-			var frameNumber;
-			frameNumber = window.pageYOffset / playbackConst;
+			if(first == true){
+				frameNumber = initialFrame;
+				first = false;
+				
+				console.log(`No longer first ${window.pageYOffset}`);
+			}else{
+				frameNumber = window.pageYOffset / playbackConst;
+			}
+			
+			
+			//frameNumber = window.pageYOffset / playbackConst;
 			
 			//track CURRENT SCROLL POSITION
 			vid.currentTime = frameNumber;
@@ -68,7 +101,48 @@ if(detector.mobile() == null ){
 			window.requestAnimationFrame(scrollPlay);
 		}
 		
-		window.requestAnimationFrame(scrollPlay);
+		window.requestAnimationFrame(scrollPlay);*/
+			
+		
+		
+		/* Detect Scroll Stop 
+		
+		function scrollStop (callback, refresh = 66) {
+
+			// Make sure a valid callback was provided
+			if (!callback || typeof callback !== 'function') return;
+
+			// Setup scrolling variable
+			let isScrolling;
+
+			// Listen for scroll events
+			window.addEventListener('scroll', function (event) {
+
+				// Clear our timeout throughout the scroll
+				window.clearTimeout(isScrolling);
+
+				// Set a timeout to run after scrolling ends
+				isScrolling = setTimeout(callback, refresh);
+
+			}, false);
+
+		}
+
+		scrollStop(function () {
+			console.log('Scrolling has stopped.');
+		});*/
+			
+		function scrollVideo() {
+		  var video = $('#v0').get(0),
+			videoLength = video.duration,
+			scrollPosition = $(document).scrollTop();
+
+		  video.currentTime = (scrollPosition / ($(document).height() - $(window).height())) * videoLength;
+		}
+
+		$(window).scroll(function(e) {
+		  scrollVideo();
+		});
 		
 	}
 	
@@ -78,6 +152,8 @@ if(detector.mobile() == null ){
 	console.log(`Is video present? ${video}`);
 	console.groupEnd();
    
+	}
+
 }else{
 	
 	document.querySelector('.section.main-section').style.height = "auto"; //set 
