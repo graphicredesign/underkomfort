@@ -39,10 +39,15 @@ function videoPause(){
 
 window.addEventListener("wheel", stopAutoScroll);
 
+var first = true;
+
 function stopAutoScroll() {
-	videoPause();
-	gsap.killTweensOf(window);
-	console.log(`Autoscroll Stopped`);
+	if(first == true){
+		videoPause();
+		gsap.killTweensOf(window);
+		first = false;
+		console.log(`Autoscroll Stopped`);
+	}
 }
 
 function startScrollBasedAnimation() {
@@ -70,7 +75,15 @@ if (detector.mobile() == null) {
 
     main_section.style.height = 10000 + "px";
     video.play();
-    TweenMax.delayedCall(3.5, videoPause, null, video);
+	video.ontimeupdate = function() {
+		
+		if(video.currentTime > 3){
+			console.log("AT TIME" + video.duration);
+			videoPause();
+		}
+	
+	};
+    //TweenMax.delayedCall(3.5, videoPause, null, video);
 
     video.onpause = function() {
         startScrollBasedAnimation();
