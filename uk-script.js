@@ -1,120 +1,119 @@
 // JavaScript Document
 
+	
 //Global
-var pagetl = gsap.timeline({
-    paused: true
-});
-pagetl.set(".box-animation", {
-    autoAlpha: 0,
-    display: "none"
-});
-pagetl.to(".main-other", 1, {
-    autoAlpha: 1
-});
-pagetl.set([".down-arrow-button"], {
-    autoAlpha: 0,
-    display: "none"
-});
-
-var scrollArrowTl = gsap.timeline({
-    paused: true
-});
-scrollArrowTl.from(".scroll-arrow-cont", 1, {
-    y: "50"
-});
-scrollArrowTl.to(".scroll-arrow-cont", 1, {
-    opacity: 1
-});
 var video = document.querySelector("#v0");
+window.scrollTo(0, 0); // Sets window to top of page
 var main_section = document.querySelector('.section.main-section');
 var detector = new MobileDetect(window.navigator.userAgent);
-var tl;
 var console = window.console;
 var gsap = window.gsap;
-
-function videoPause(){
-	video.pause();
-	console.log(`Video Paused`);
-}
-
-window.addEventListener("wheel", stopAutoScroll);
-
 var first = true;
 
-function stopAutoScroll() {
+var autoScrollTl = gsap.timeline();
+
+autoScrollTl.to(window, {
+    duration: 5,
+    scrollTo: 5000,
+    ease: Power1.easeOut
+});
+
+
+console.log(`Current length of video is ${video.duration}`);
+console.log("1")
+
+function stopAutoScroll() { //stop video on mouse scroll
 	if(first == true){
-		videoPause();
-		gsap.killTweensOf(window);
-		first = false;
-		console.log(`Autoscroll Stopped`);
+		video.pause(); //stops video
+		gsap.killTweensOf(window); //stops auto scroll on window
+		first = false; //makes sure this only happens once
+		console.log(`#1 if wheel, 2# if paused - Auto Stopped`);
 	}
 }
 
-function startScrollBasedAnimation() {
-	
-    function scrollVideo() {
-        var video = $('#v0').get(0),
-            videoLength = video.duration,
-            scrollPosition = $(document).scrollTop();
+function scrollVideo() { //reference: https://codepen.io/juanbrujo/pen/KJdst
 
-        video.currentTime = (scrollPosition / ($(document).height() - $(window).height())) * videoLength;
-    }
+    var video = $('#v0').get(0),
+        videoLength = video.duration,
+        scrollPosition = window.pageYOffset; //$(document).scrollTop();
 
-    $(window).scroll(function() {
-        scrollVideo();
-    });
+    video.currentTime = (scrollPosition / ($(document).height() - $(window).height())) * (12.5); //videoLength
 
-    console.group(`DESKTOP`);
-    console.log(`Is video present? ${video}`);
+    console.group("Window Scrolling Information");
+    console.log(`#3 Video is being scrolled`);
+    console.log(`Current time is ${video.currentTime}`);
+	console.log(`Current Y offset ${window.pageYOffset}`);
     console.groupEnd();
 
 }
 
-/** Detect Mobile **/
-if (detector.mobile() == null) {
+$(window).scroll(function() {
+    scrollVideo();
+});
 
-    main_section.style.height = 10000 + "px";
-    video.play();
-	video.ontimeupdate = function() {
+window.addEventListener("wheel", wheelScroll);
+
+function wheelScroll() {
+	
+	if(first == true){
+		stopAutoScroll();
+	}
+	
+	console.group("Wheel Scrolling Information");
+	console.log(`Current time is ${video.currentTime}`);
+	console.log(`Current Y offset ${window.pageYOffset}`);
+	console.groupEnd();
+	
+}
+
+console.group("#2 Paused Video + Scroll Initiated");
+console.log(`Current time is ${video.currentTime} on pause`); //3.361449, 3.418976, 3.045391, 3.422562
+console.log(`Current Y offset ${window.pageYOffset}`);
+console.groupEnd();
+
+/*video.onpause = function() { //starts scroll animation once video stops
+	
 		
-		if(video.currentTime > 3){
-			console.log("AT TIME" + video.duration);
-			videoPause();
+};*/
+
+video.ontimeupdate = function() {
+		
+		console.log(`This is the current time: ${video.currentTime} during play`);
+		
+		if(video.currentTime > 9.85){
+			gsap.to(main_section, 1, {autoAlpha: 0});
+			console.log("Video auto-stopped here: " + video.duration);
+		}else{
+			gsap.to(main_section, 1, {autoAlpha: 1});
 		}
 	
-	};
-    //TweenMax.delayedCall(3.5, videoPause, null, video);
+};
 
-    video.onpause = function() {
-        startScrollBasedAnimation();
-        console.group("Paused Video Info");
-        console.log('paused video');
-        console.log(`Current time is ${video.currentTime} on pause`); //3.361449, 3.418976, 3.045391, 3.422562
-        console.log(`Current Y offset ${window.pageYOffset}`)
-        console.groupEnd();
-    };
 
-    //** Setup scroll for video **//
+/** Detect Device **/
+if (detector.mobile() == null) { //Desktop
 
-    tl = gsap.timeline();
-    tl.to(window, {
-        duration: 5,
-        scrollTo: 3500,
-        ease: Power1.easeOut
-    });
+    main_section.style.height = ((Math.floor(video.duration) * 1000)*2) + "px";
 	
-    startScrollBasedAnimation();
+	console.group(`DESKTOP`);
+	console.log("#1 Video has completely loaded.");
+	console.log(`Dynamic Height ${main_section.style.height}`);
+	console.groupEnd();
 
 } else {
 
     main_section.style.height = "auto"; //set 
     video.stop(); //stop video in case it plays in non-IOS Safari browsers/devices
     video.style.display = "none"; //remove video
-
-
+	video.parentNode.removeChild(video);
+	
     console.group(`MOBILE`);
     console.log(`Is video present? ${video}`);
+	console.log(`Dynamic Height ${main_section.style.height}`);
     console.groupEnd();
-
+	
 }
 
+for (let func in console) {
+   console[func] = function() {};
+}
