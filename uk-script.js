@@ -5,25 +5,49 @@ window.onload = function() {
 	
 //Global
 var video = document.querySelector("#v0");
-video.pause();
 var main_section = document.querySelector('.section.main-section');
 var detector = new MobileDetect(window.navigator.userAgent);
 var console = window.console;
 var gsap = window.gsap;
+
+	
+//First Load
 var first = true;
+video.pause(); //pause video
+var autoScrollTl = gsap.timeline(); //pause scrolling
+autoScrollTl.pause();
 
-var autoScrollTl = gsap.timeline();
+var reverseBtnTl = gsap.timeline({paused: true});
+reverseBtnTl.to(".scroll-arrow-button", .25, {autoAlpha: 0, delay:5});
+reverseBtnTl.to(".down-arrow-button", .25, {autoAlpha: 1});
+	
+	
+// Create a condition that targets viewports at least 768px wide
+const mediaQuery = window.matchMedia('(min-width: 991px )'); //991 px or more
 
-if(video.currentTime > 0){
-	
-}else{
-	autoScrollTl.to(window, {
-		duration: 5,
-		scrollTo: 5000,
-		ease: Power1.easeOut
-	});
-	
+function handleTabletChange(e) {
+  // Check if the media query is true
+  if (e.matches) {
+    // Then log the following message to the console
+	reverseBtnTl.restart();
+	autoScrollTl.totalProgress(0); 
+	autoScrollTl.restart(); //start scrolling
+    console.log('Media Query Matched!');
+  }
 }
+
+// Register event listener
+mediaQuery.addListener(handleTabletChange)
+
+// Initial check
+handleTabletChange(mediaQuery)
+	
+autoScrollTl.to(window, {
+	duration: 5,
+	scrollTo: 3500,
+	delay:.25,
+	ease: Power1.easeOut
+});
 
 
 console.log(`Current length of video is ${video.duration}`);
@@ -43,19 +67,25 @@ function scrollVideo() { //reference: https://codepen.io/juanbrujo/pen/KJdst
     var video = $('#v0').get(0),
         videoLength = video.duration,
         scrollPosition = window.pageYOffset; //$(document).scrollTop();
-
+	
+	/*console.group("DEBUG");
+	console.log(`Scroll Position is ${scrollPosition}`);
+	console.log(`Document Height is ${$(document).height()}`);
+	console.log(`Window Height is ${$(window).height()}`);
+	console.groupEnd();*/
+	
     video.currentTime = (scrollPosition / ($(document).height() - $(window).height())) * (14.75); //videoLength
 
-    console.group("Window Scrolling Information");
+   /* console.group("Window Scrolling Information");
     console.log(`#3 Video is being scrolled`);
     console.log(`Current time is ${video.currentTime}`);
 	console.log(`Current Y offset ${window.pageYOffset}`);
-    console.groupEnd();
+    console.groupEnd();*/
 
 }
 
 $(window).scroll(function() {
-    scrollVideo();
+	scrollVideo();
 });
 
 window.addEventListener("wheel", wheelScroll);
@@ -64,13 +94,15 @@ function wheelScroll() {
 	
 	if(first == true){
 		stopAutoScroll();
+		gsap.to(".scroll-arrow-button", .25, {autoAlpha: 0});
+		gsap.to(".down-arrow-button", .25, {autoAlpha: 1});
 		gsap.set(".scroll-arrow-button", {autoAlpha: 0});
 	}
 	
-	console.group("Wheel Scrolling Information");
+	/*console.group("Wheel Scrolling Information");
 	console.log(`Current time is ${video.currentTime}`);
 	console.log(`Current Y offset ${window.pageYOffset}`);
-	console.groupEnd();
+	console.groupEnd();*/
 	
 }
 
@@ -86,7 +118,7 @@ console.groupEnd();
 
 video.ontimeupdate = function() {
 		
-		console.log(`This is the current time: ${video.currentTime} during play`);
+		//console.log(`This is the current time: ${video.currentTime} during play`);
 		
 		if(video.currentTime > 9.85){
 			gsap.to(main_section, 1, {autoAlpha: 0});
@@ -101,30 +133,31 @@ video.ontimeupdate = function() {
 /** Detect Device **/
 if (detector.mobile() == null) { //Desktop
 
-    main_section.style.height = ((Math.floor(video.duration) * 1000)) + "px";
+    //main_section.style.height = ((Math.floor(video.duration) * 1000)) + "px";
 	
-	console.group(`DESKTOP`);
+	/*console.group(`DESKTOP`);
 	console.log("#1 Video has completely loaded.");
 	console.log(`Dynamic Height ${main_section.style.height}`);
 	console.log(window.pageYOffset);
 	console.log(window.scrollTop);
-	console.groupEnd();
+	console.groupEnd();*/
 
 } else {
 
-    main_section.style.height = "auto"; //set 
-    video.stop(); //stop video in case it plays in non-IOS Safari browsers/devices
+    //main_section.style.height = "auto"; //set 
+    video.pause(); //stop video in case it plays in non-IOS Safari browsers/devices
     video.style.display = "none"; //remove video
 	video.parentNode.removeChild(video);
 	
-    console.group(`MOBILE`);
+    /*console.group(`MOBILE`);
     console.log(`Is video present? ${video}`);
 	console.log(`Dynamic Height ${main_section.style.height}`);
-    console.groupEnd();
+    console.groupEnd();*/
 	
 }
 
 for (let func in console) {
    console[func] = function() {};
 }
+	
 };

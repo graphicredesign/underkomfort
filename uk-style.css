@@ -3,6 +3,23 @@
 
 /*.recaptcha-cont { visibility: hidden; }*/
 
+.snipcart-cart-button--highlight, .snipcart__box--badge-highlight{
+	background-image: none !important;
+	background: #8c6f59;
+}
+
+.snipcart__icon--blue-light path, .snipcart__icon--blue-dark path, .snipcart__icon--blue-dark path{
+	fill: #8c6f59;
+}
+
+.snipcart__actions--link{
+	color: #8c6f59;
+}
+
+.highlighter--highlighted{
+	background-color: transparent;
+}
+
 .sub-nav{
  
   -webkit-backdrop-filter: saturate(10%) blur(5px) !important; 
@@ -21,6 +38,9 @@
 	pointer-events: none;
 }
 
+.down-arrow-button{
+	opacity: 0;
+}
 
 /*#v0{
   margin-top:-5%;
