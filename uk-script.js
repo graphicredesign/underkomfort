@@ -44,7 +44,7 @@ function scrollVideo() { //reference: https://codepen.io/juanbrujo/pen/KJdst
         videoLength = video.duration,
         scrollPosition = window.pageYOffset; //$(document).scrollTop();
 
-    video.currentTime = (scrollPosition / ($(document).height() - $(window).height())) * (12.5); //videoLength
+    video.currentTime = (scrollPosition / ($(document).height() - $(window).height())) * (14.75); //videoLength
 
     console.group("Window Scrolling Information");
     console.log(`#3 Video is being scrolled`);
@@ -64,7 +64,7 @@ function wheelScroll() {
 	
 	if(first == true){
 		stopAutoScroll();
-		gsap.to(".scroll-arrow-button", .25, {autoAlpha: 0});
+		gsap.set(".scroll-arrow-button", {autoAlpha: 0});
 	}
 	
 	console.group("Wheel Scrolling Information");
@@ -101,7 +101,7 @@ video.ontimeupdate = function() {
 /** Detect Device **/
 if (detector.mobile() == null) { //Desktop
 
-    main_section.style.height = ((Math.floor(video.duration) * 1000)*2) + "px";
+    main_section.style.height = ((Math.floor(video.duration) * 1000)) + "px";
 	
 	console.group(`DESKTOP`);
 	console.log("#1 Video has completely loaded.");
