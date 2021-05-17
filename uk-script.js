@@ -1,9 +1,11 @@
 // JavaScript Document
+window.onload = function() {
+  // Some code
 
 	
 //Global
 var video = document.querySelector("#v0");
-window.scrollTo(0, 0); // Sets window to top of page
+video.pause();
 var main_section = document.querySelector('.section.main-section');
 var detector = new MobileDetect(window.navigator.userAgent);
 var console = window.console;
@@ -12,11 +14,16 @@ var first = true;
 
 var autoScrollTl = gsap.timeline();
 
-autoScrollTl.to(window, {
-    duration: 5,
-    scrollTo: 5000,
-    ease: Power1.easeOut
-});
+if(video.currentTime > 0){
+	
+}else{
+	autoScrollTl.to(window, {
+		duration: 5,
+		scrollTo: 5000,
+		ease: Power1.easeOut
+	});
+	
+}
 
 
 console.log(`Current length of video is ${video.duration}`);
@@ -57,6 +64,7 @@ function wheelScroll() {
 	
 	if(first == true){
 		stopAutoScroll();
+		gsap.to(".scroll-arrow-button", .25, {autoAlpha: 0});
 	}
 	
 	console.group("Wheel Scrolling Information");
@@ -98,6 +106,8 @@ if (detector.mobile() == null) { //Desktop
 	console.group(`DESKTOP`);
 	console.log("#1 Video has completely loaded.");
 	console.log(`Dynamic Height ${main_section.style.height}`);
+	console.log(window.pageYOffset);
+	console.log(window.scrollTop);
 	console.groupEnd();
 
 } else {
@@ -117,3 +127,4 @@ if (detector.mobile() == null) { //Desktop
 for (let func in console) {
    console[func] = function() {};
 }
+};
