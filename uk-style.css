@@ -16,6 +16,10 @@
 	color: #8c6f59;
 }
 
+.snipcart__icon--blue-light path{
+	color: #8c6f59;
+}
+
 .highlighter--highlighted{
 	background-color: transparent;
 }
@@ -27,6 +31,16 @@
   
 }
 
+.section.main-section{
+	height: 10000px;
+}
+
+/*
+.lightbox-content{
+	pointer-events: none;
+}
+*/
+
 .button.sub-nav{
  
   -webkit-backdrop-filter: none; 
@@ -36,6 +50,7 @@
 
 .scroll-arrow-button{
 	pointer-events: none;
+	display: flex;
 }
 
 .down-arrow-button{

@@ -1,11 +1,13 @@
 // JavaScript Document
-window.onload = function() {
+window.onload = function(){
   // Some code
 
 	
 //Global
 var video = document.querySelector("#v0");
+video.load();
 var main_section = document.querySelector('.section.main-section');
+var main_video = document.querySelector('.main-video');
 var detector = new MobileDetect(window.navigator.userAgent);
 var console = window.console;
 var gsap = window.gsap;
@@ -39,12 +41,17 @@ function handleTabletChange(e) {
 // Register event listener
 mediaQuery.addListener(handleTabletChange)
 
+//video.load();
 // Initial check
-handleTabletChange(mediaQuery)
+video.onloadeddata = function () {
+	console.log("video has loaded")
+  handleTabletChange(mediaQuery);
 	
+};
+
 autoScrollTl.to(window, {
 	duration: 5,
-	scrollTo: 3500,
+	scrollTo: 2000,
 	delay:.25,
 	ease: Power1.easeOut
 });
@@ -74,7 +81,7 @@ function scrollVideo() { //reference: https://codepen.io/juanbrujo/pen/KJdst
 	console.log(`Window Height is ${$(window).height()}`);
 	console.groupEnd();*/
 	
-    video.currentTime = (scrollPosition / ($(document).height() - $(window).height())) * (14.75); //videoLength
+    video.currentTime = (scrollPosition / ($(document).height() - $(window).height())) * (16); //videoLength
 
    /* console.group("Window Scrolling Information");
     console.log(`#3 Video is being scrolled`);
@@ -106,10 +113,10 @@ function wheelScroll() {
 	
 }
 
-console.group("#2 Paused Video + Scroll Initiated");
+/*console.group("#2 Paused Video + Scroll Initiated");
 console.log(`Current time is ${video.currentTime} on pause`); //3.361449, 3.418976, 3.045391, 3.422562
 console.log(`Current Y offset ${window.pageYOffset}`);
-console.groupEnd();
+console.groupEnd();*/
 
 /*video.onpause = function() { //starts scroll animation once video stops
 	
@@ -121,10 +128,10 @@ video.ontimeupdate = function() {
 		//console.log(`This is the current time: ${video.currentTime} during play`);
 		
 		if(video.currentTime > 9.85){
-			gsap.to(main_section, 1, {autoAlpha: 0});
+			gsap.to(main_section, .25, {autoAlpha: 0});
 			console.log("Video auto-stopped here: " + video.duration);
 		}else{
-			gsap.to(main_section, 1, {autoAlpha: 1});
+			gsap.to(main_section, .25, {autoAlpha: 1});
 		}
 	
 };
@@ -157,7 +164,7 @@ if (detector.mobile() == null) { //Desktop
 }
 
 for (let func in console) {
-   console[func] = function() {};
+   //console[func] = function() {};
 }
 	
 };
