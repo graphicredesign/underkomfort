@@ -50,12 +50,11 @@ video.onloadeddata = function () {
 };
 
 autoScrollTl.to(window, {
-	duration: 5,
+	duration: 2,
 	scrollTo: 2000,
 	delay:.25,
 	ease: Power1.easeOut
 });
-
 
 console.log(`Current length of video is ${video.duration}`);
 console.log("1")
