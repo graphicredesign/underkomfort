@@ -26,7 +26,8 @@ reverseBtnTl.to(".down-arrow-button", .25, {autoAlpha: 1});
 	
 // Create a condition that targets viewports at least 768px wide
 const mediaQuery = window.matchMedia('(min-width: 991px )'); //991 px or more
-
+//ScrollTrigger.refresh(true);
+	
 function handleTabletChange(e) {
   // Check if the media query is true
   if (e.matches) {
